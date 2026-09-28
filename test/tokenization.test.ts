@@ -15,6 +15,15 @@ for (const model of models) {
       assert.deepEqual(actual.ids, sample.ids, sample.text);
       assert.deepEqual(actual.tokens, sample.tokens, sample.text);
       assert.equal(actual.decoded, sample.decoded, sample.text);
+      assert.equal(actual.groups.map((group) => group.text).join(''), actual.decoded);
+      assert.deepEqual(actual.groups.flatMap((group) => group.ids), actual.ids);
+      assert.ok(actual.tokenDetails.every((token) => token.bytes.every((byte) => Number.isInteger(byte))));
+      if (sample.text === '龘🙂') {
+        assert.ok(actual.tokenDetails.some((item) => item.independentText === null));
+        assert.deepEqual(actual.groups.map((group) => group.text), ['龘', '🙂']);
+        assert.deepEqual(actual.tokenDetails.flatMap((token) => token.bytes), [0xE9, 0xBE, 0x98, 0xF0, 0x9F, 0x99, 0x82]);
+      }
+      if (sample.text === 'cafe\u0301') assert.equal(actual.exactRoundTrip, model.key !== 'qwen3');
     }
   });
 }

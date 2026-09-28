@@ -1,4 +1,4 @@
-import { Tokenizer } from '@huggingface/tokenizers';
+import { ByteLevelDecoder, Tokenizer } from '@huggingface/tokenizers';
 import manifest from '../public/tokenizers/manifest.json';
 
 export const models = manifest.models;
@@ -33,6 +33,30 @@ export function analyze(text: string, tokenizer: Tokenizer) {
   const decoded = encoded.ids.length
     ? tokenizer.decode(encoded.ids, { skip_special_tokens: false, clean_up_tokenization_spaces: false })
     : '';
+  if (!(tokenizer.decoder instanceof ByteLevelDecoder)) throw new Error('本实验的字节观察只适用于这两份 ByteLevel 分词器。');
+  const decoder = tokenizer.decoder;
+  const added = tokenizer.get_added_tokens_decoder();
+  const tokenDetails = encoded.tokens.map((token, index) => {
+    const id = encoded.ids[index];
+    const literal = added.get(id);
+    // 字节映射由官方库提供；这里仅整理显示，不重新实现分词算法。
+    const bytes = literal ? Array.from(new TextEncoder().encode(literal.content)) : Array.from(token, (character) => Number(decoder.byte_decoder[character]));
+    if (bytes.some((byte) => !Number.isInteger(byte) || byte < 0 || byte > 255)) throw new Error('词表中出现了无法显示的字节映射。');
+    return { index, id, rawToken: token, bytes, special: literal?.special ?? false, independentText: decodeCompleteBytes(bytes) };
+  });
+  const groups: { text: string; start: number; end: number; ids: number[] }[] = [];
+  let pending: number[] = [];
+  let start = 0;
+  for (const token of tokenDetails) {
+    pending.push(...token.bytes);
+    const complete = decodeCompleteBytes(pending);
+    if (complete !== null) {
+      groups.push({ text: complete, start, end: token.index + 1, ids: encoded.ids.slice(start, token.index + 1) });
+      start = token.index + 1;
+      pending = [];
+    }
+  }
+  if (pending.length) throw new Error('token 序列未组成完整的 UTF-8 文本。');
   return {
     input: text,
     count: encoded.ids.length,
@@ -40,5 +64,16 @@ export function analyze(text: string, tokenizer: Tokenizer) {
     tokens: encoded.tokens,
     decoded,
     exactRoundTrip: decoded === text,
+    normalizedInput: tokenizer.normalizer?.normalize(text) ?? text,
+    tokenDetails,
+    groups,
   };
+}
+
+function decodeCompleteBytes(bytes: number[]): string | null {
+  try {
+    return new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(new Uint8Array(bytes));
+  } catch {
+    return null;
+  }
 }
