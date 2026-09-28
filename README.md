@@ -1,11 +1,12 @@
 # 模型机制观察室
 
-包含两个独立页面：
+包含三个独立页面：
 
 | 页面 | 地址 | 观察内容 |
 | --- | --- | --- |
 | 分词观察室 | `http://127.0.0.1:4319/` | 官方分词器的 token、编号、字节和完整解码 |
 | 向量观察室 | `http://127.0.0.1:4319/vectors.html` | 用人工数字演示编号查表、方向、长度与三种比较指标 |
+| 生成观察室 | `http://127.0.0.1:4319/generation.html` | 用人工候选得分演示逐步选择 token、追加上下文和停止 |
 
 ## 分词观察
 
@@ -92,3 +93,31 @@ pnpm dev
 ```
 
 用 `pnpm exec tsx scripts/record-vectors.ts` 重新生成 `evidence/向量实验结果.json`；它保存实际计算值，余弦未定义时记录为 `null`。无需下载权重或配置密钥。
+
+## 逐步生成观察
+
+打开 `/generation.html`，从“早餐喝”开始，每次只选择一个教学 token。页面列出本步人工候选的得分与实际 softmax 计算概率，并保留选择前的上下文和候选记录。
+
+主要按钮每次选择最高概率，并列时取表中靠前的一项。候选行的“手动选它”用于比较分支，不等于模型随机采样。所有词表、得分和上下文转移均为人工设置，不是真实模型内部记录，没有运行模型推理，也无需密钥。
+
+连续选择最高概率，会得到“豆浆 → 。 → <EOS>”。手动选择“咖啡 → ， → 配面包 → ， → 配包子 → ，”，可以观察达到 6 个生成 token 上限后的截断。上限包括结束标记，不包括最初的“早餐喝”；选到 `<EOS>` 视为序列结束，它不拼进普通输出文字。句号后只生成结束标记是本页的教学规则。
+
+起点 `vcm-02-03-start` 是上一课的完成版，包含分词与向量页。完成点 `vcm-02-03-end` 增加生成页。建立自己的练习分支：
+
+```powershell
+git switch -c my-generation-lab vcm-02-03-end
+pnpm install --frozen-lockfile
+pnpm dev
+```
+
+恢复前先保留实验，再从完成点创建另一条分支：
+
+```powershell
+git add .
+git commit -m "保存我的逐步生成实验"
+git switch -c my-generation-lab-retry vcm-02-03-end
+pnpm install --frozen-lockfile
+pnpm dev
+```
+
+用 `pnpm exec tsx scripts/record-generation.ts` 重新生成 `evidence/生成实验结果.json`，其中保存未舍入的概率、每步候选、所选 token 与停止原因。

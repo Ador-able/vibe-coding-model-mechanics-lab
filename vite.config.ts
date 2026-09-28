@@ -9,6 +9,7 @@ export default defineConfig({
       input: {
         tokens: fileURLToPath(new URL('./index.html', import.meta.url)),
         vectors: fileURLToPath(new URL('./vectors.html', import.meta.url)),
+        generation: fileURLToPath(new URL('./generation.html', import.meta.url)),
       },
     },
   },
