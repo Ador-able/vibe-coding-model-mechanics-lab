@@ -1,6 +1,6 @@
 # 模型机制观察室
 
-包含四个独立页面：
+包含五个独立页面：
 
 | 页面 | 地址 | 观察内容 |
 | --- | --- | --- |
@@ -8,6 +8,7 @@
 | 向量观察室 | `http://127.0.0.1:4319/vectors.html` | 用人工数字演示编号查表、方向、长度与三种比较指标 |
 | 生成观察室 | `http://127.0.0.1:4319/generation.html` | 用人工候选得分演示逐步选择 token、追加上下文和停止 |
 | 注意力观察室 | `http://127.0.0.1:4319/attention.html` | 用人工 Q、K、V 观察注意力权重与加权汇总 |
+| Transformer 观察室 | `http://127.0.0.1:4319/transformer.html` | 运行人工 decoder，比较因果遮罩与未来信息泄漏 |
 
 ## 分词观察
 
@@ -148,3 +149,38 @@ pnpm dev
 ```
 
 `pnpm exec tsx scripts/record-attention.ts` 可重新生成 `evidence/注意力实验结果.json`，保存未舍入的得分、权重、加权贡献与输出。计算公式对应 [Attention Is All You Need 第 3.2.1 节](https://arxiv.org/html/1706.03762v7#S3.SS2.SSS1)。
+
+## Transformer 观察
+
+打开 `/transformer.html`。输入固定前三个教学 token A、B、C，切换最后一位 D/E。默认观察第 2 位：开启因果遮罩时，改动未来输入不会改变它的候选分布；关闭遮罩后可观察信息泄漏。关闭遮罩只供对照，不用于正常的自回归生成。也可点选热力图的查询行，核对各位置的可读范围。
+
+该模型只有一层、一个注意力头、4维表示和5个教学候选，参数全部人工指定且未训练，不是 Qwen 内部记录，不具备中文理解能力。它使用人工位置向量直接相加，不使用 RoPE。计算链如下：
+
+```text
+Embedding + 位置
+→ LayerNorm → Q/K/V 投影 → 因果注意力 → 输出投影 → 加回输入
+→ LayerNorm → 4→6 线性层 → ReLU → 6→4 线性层 → 加回注意力后的表示
+→ FinalNorm → 4→5 词表投影 → softmax
+```
+
+LayerNorm 每个位置独立计算，γ=1、β=0、ε=0.00001。没有 dropout、缓存、训练或多头拆分。完整人工参数和各阶段矩阵可在页面折叠区核查，也保存在 `src/transformer/model.ts` 与实验结果文件中。
+
+Node.js `24.12.0`、pnpm `11.20.0`。从完成点建立独立练习分支并启动：
+
+```powershell
+git switch -c my-transformer-lab vcm-02-05-end
+pnpm install --frozen-lockfile
+pnpm dev
+```
+
+起点 `vcm-02-05-start` 是上一课的完成版；完成点 `vcm-02-05-end` 增加此页。重来前保留实验，再从完成点新建分支：
+
+```powershell
+git add .
+git commit -m "保存我的 Transformer 实验"
+git switch -c my-transformer-lab-retry vcm-02-05-end
+pnpm install --frozen-lockfile
+pnpm dev
+```
+
+执行 `pnpm exec tsx scripts/record-transformer.ts`，可重新生成 `evidence/Transformer实验结果.json`。它包含遮罩开启/关闭、输入 D/E 的四次真实前向结果；被遮罩的得分以字符串 `-Infinity` 保存，权重为 0。显示取三位小数，计算保留原精度。无需密钥或下载模型权重。
