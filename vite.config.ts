@@ -12,6 +12,7 @@ export default defineConfig({
         generation: fileURLToPath(new URL('./generation.html', import.meta.url)),
         attention: fileURLToPath(new URL('./attention.html', import.meta.url)),
         transformer: fileURLToPath(new URL('./transformer.html', import.meta.url)),
+        sampling: fileURLToPath(new URL('./sampling.html', import.meta.url)),
       },
     },
   },

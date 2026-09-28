@@ -1,6 +1,6 @@
 # 模型机制观察室
 
-包含五个独立页面：
+包含六个独立页面：
 
 | 页面 | 地址 | 观察内容 |
 | --- | --- | --- |
@@ -9,6 +9,7 @@
 | 生成观察室 | `http://127.0.0.1:4319/generation.html` | 用人工候选得分演示逐步选择 token、追加上下文和停止 |
 | 注意力观察室 | `http://127.0.0.1:4319/attention.html` | 用人工 Q、K、V 观察注意力权重与加权汇总 |
 | Transformer 观察室 | `http://127.0.0.1:4319/transformer.html` | 运行人工 decoder，比较因果遮罩与未来信息泄漏 |
+| 采样观察室 | `http://127.0.0.1:4319/sampling.html` | 对比温度、top-p 与固定前缀的100次本地抽样 |
 
 ## 分词观察
 
@@ -184,3 +185,29 @@ pnpm dev
 ```
 
 执行 `pnpm exec tsx scripts/record-transformer.ts`，可重新生成 `evidence/Transformer实验结果.json`。它包含遮罩开启/关闭、输入 D/E 的四次真实前向结果；被遮罩的得分以字符串 `-Infinity` 保存，权重为 0。显示取三位小数，计算保留原精度。无需密钥或下载模型权重。
+
+## 采样观察
+
+打开 `/sampling.html`，复用“早餐喝”的人工初始得分：豆浆 2、咖啡 1、茶 0。对照温度 0.5/1/2 的分布，再选择 top-p 1/0.8/0.5，观察概率排序、累计阈值与重归一化。top-p 保留达到阈值的最小前缀，包含跨过阈值的一项；top-p=1 保留全部候选。
+
+“运行100次抽样”每次都从同一固定分布有放回抽取一个 token，不是生成连续100个 token。默认 T=1、top-p=0.8、种子2026；参数或种子变化后旧结果清空。32位线性同余伪随机算法只用于本页复现，同一种子不保证任何云端模型结果相同。人工概率不是任务正确率；这里没有训练、推理能力或真实 API 调用，也不需要密钥。
+
+本课起点 `vcm-02-06-start` 是上一课完成版；完成点 `vcm-02-06-end` 增加此页。按项目既有 Node.js/pnpm 版本启动独立分支：
+
+```powershell
+git switch -c my-sampling-lab vcm-02-06-end
+pnpm install --frozen-lockfile
+pnpm dev
+```
+
+恢复前保存实验，再从完成点建立新分支：
+
+```powershell
+git add .
+git commit -m "保存我的采样实验"
+git switch -c my-sampling-lab-retry vcm-02-06-end
+pnpm install --frozen-lockfile
+pnpm dev
+```
+
+执行 `pnpm exec tsx scripts/record-sampling.ts` 可重新生成 `evidence/采样实验结果.json`，包含温度对照、top-p=0.8 的候选与两组种子下逐次抽样的真实结果。
