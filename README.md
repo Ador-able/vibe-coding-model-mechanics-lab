@@ -1,12 +1,13 @@
 # 模型机制观察室
 
-包含三个独立页面：
+包含四个独立页面：
 
 | 页面 | 地址 | 观察内容 |
 | --- | --- | --- |
 | 分词观察室 | `http://127.0.0.1:4319/` | 官方分词器的 token、编号、字节和完整解码 |
 | 向量观察室 | `http://127.0.0.1:4319/vectors.html` | 用人工数字演示编号查表、方向、长度与三种比较指标 |
 | 生成观察室 | `http://127.0.0.1:4319/generation.html` | 用人工候选得分演示逐步选择 token、追加上下文和停止 |
+| 注意力观察室 | `http://127.0.0.1:4319/attention.html` | 用人工 Q、K、V 观察注意力权重与加权汇总 |
 
 ## 分词观察
 
@@ -121,3 +122,29 @@ pnpm dev
 ```
 
 用 `pnpm exec tsx scripts/record-generation.ts` 重新生成 `evidence/生成实验结果.json`，其中保存未舍入的概率、每步候选、所选 token 与停止原因。
+
+## 注意力观察
+
+打开 `/attention.html`。主图显示三个位置的注意力权重、各自的加权贡献和最终输出。可以切换 Q，也可以只改变 C 的 V；逐项计算在下方折叠区。
+
+这里使用人工二维 Q、K、V，位置 A、B、C 不对应具体词语，维度没有固定语义。程序真实计算 `softmax(Q Kᵀ / √2) V`，没有运行模型推理，不加载权重，不需要密钥。这个单查询实验只观察三个位置之间的加权汇总，不展示完整 Transformer。
+
+起点 `vcm-02-04-start` 是上一课完成版。完成点 `vcm-02-04-end` 增加独立注意力页；从完成点建立自己的分支后运行：
+
+```powershell
+git switch -c my-attention-lab vcm-02-04-end
+pnpm install --frozen-lockfile
+pnpm dev
+```
+
+重来前先保留当前实验，再从完成点新建分支：
+
+```powershell
+git add .
+git commit -m "保存我的注意力实验"
+git switch -c my-attention-lab-retry vcm-02-04-end
+pnpm install --frozen-lockfile
+pnpm dev
+```
+
+`pnpm exec tsx scripts/record-attention.ts` 可重新生成 `evidence/注意力实验结果.json`，保存未舍入的得分、权重、加权贡献与输出。计算公式对应 [Attention Is All You Need 第 3.2.1 节](https://arxiv.org/html/1706.03762v7#S3.SS2.SSS1)。
