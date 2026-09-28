@@ -30,23 +30,23 @@ h2 { font-size: 17px; font-weight: 600; margin: 0; }
 #architecture-diagram { width: 100%; min-width: 920px; display: block; }
 .block-boundary { fill: #f5f9fa; stroke: #e1eaed; }
 .block-title { font: 12px 'Microsoft YaHei', sans-serif; fill: #78969e; }
-.stage-label { font: 12px 'Microsoft YaHei', sans-serif; fill: #67828e; }
+.stage-label { font: 13px 'Microsoft YaHei', sans-serif; fill: #456672; }
 .row-link { fill: none; stroke: #d0dde1; stroke-width: 1; }
 .active-link { stroke: #6a9ea7; }
 .residual-path { fill: none; stroke: #5796a3; stroke-width: 1.8; }
-.residual-label { font: 11px 'Microsoft YaHei', sans-serif; fill: #66929f; }
+.residual-label { font: 12px 'Microsoft YaHei', sans-serif; fill: #456672; }
 .token-label { font: 14px Consolas, monospace; fill: #a0b0b7; }
 .selected-token { fill: #2e7f89; font-weight: 600; }
 .norm-box { fill: #f9fbfb; stroke: #dbe5e8; }
 .selected-box { fill: #e6f1f0; stroke: #8ab8bb; }
 .norm-text { font: 11px Consolas, monospace; fill: #8199a2; }
 .ffn-box { fill: #f9fbfc; stroke: #d8e5e8; }
-.ffn-text { font: 12px Consolas, monospace; fill: #77929e; }
+.ffn-text { font: 13px Consolas, monospace; fill: #456672; }
 .add-node { fill: white; stroke: #9ebac4; }
 .add-text { font: 19px Consolas, monospace; fill: #7799a6; }
 .attention-connection { fill: none; stroke: #3b9692; stroke-opacity: .7; }
 .small-label { font: 10px 'Microsoft YaHei', sans-serif; fill: #93a8b0; }
-.flow-caption { color: #879ca6; font-size: 11px; line-height: 1.8; margin: 0; }
+.flow-caption { color: #456672; font-size: 13px; line-height: 1.8; margin: 0; }
 .comparison-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
 .comparison-heading label, .stage-picker { color: #7b959f; font-size: 12px; }
 select { border: 1px solid #d4e1e5; border-radius: 5px; background: #f7fafb; color: #5e7c89; padding: 7px 11px; margin-left: 8px; font-size: 12px; }
@@ -56,19 +56,19 @@ h3 span { display: block; margin-top: 6px; font-size: 10px; color: #92a5ae; }
 table { width: 100%; border-collapse: collapse; }
 th { font-weight: 500; }
 .heatmap { border-collapse: separate; border-spacing: 4px; }
-.heatmap thead th { font-size: 11px; color: #7a949f; padding: 4px; }
-.heatmap thead th:first-child { font-size: 9px; width: 91px; }
+.heatmap thead th { font-size: 13px; color: #456672; padding: 4px; }
+.heatmap thead th:first-child { font-size: 11px; width: 91px; }
 .heatmap tbody th { padding: 0; width: 72px; }
 .heatmap button { width: 100%; padding: 13px 6px; border: 1px solid transparent; border-radius: 5px; background: #f4f8f9; color: #7b98a2; cursor: pointer; font: 14px Consolas, monospace; }
 .heatmap td { border-radius: 5px; font: 13px Consolas, monospace; text-align: center; color: #356c69; padding: 13px 5px; min-width: 63px; }
 .heatmap td.masked { background: repeating-linear-gradient(-45deg,#f2f5f6,#f2f5f6 4px,#eaf0f2 4px,#eaf0f2 5px); color: #acbbc1; }
 .selected-query td { box-shadow: inset 0 0 0 2px #649ea6; }
 .selected-query button { border-color: #649ea6; background: #e9f3f2; color: #368087; }
-#readable-range { font-size: 11px; line-height: 1.8; color: #86a0a8; margin: 10px 0 0; }
+#readable-range { font-size: 13px; line-height: 1.8; color: #456672; margin: 10px 0 0; }
 .distribution th, .distribution td { border-bottom: 1px solid #e4ecef; padding: 12px 9px; font-size: 13px; text-align: right; }
-.distribution thead th { background: #f6f9fa; color: #8ba0a9; font-size: 10px; }
+.distribution thead th { background: #f6f9fa; color: #456672; font-size: 13px; }
 .distribution th:first-child { text-align: left; }
-.distribution tbody td { font-family: Consolas, monospace; color: #75929c; }
+.distribution tbody td { font-family: Consolas, monospace; color: #456672; }
 .current-probability { position: relative; overflow: hidden; }
 .current-probability .bar { position: absolute; height: 100%; left: 0; top: 0; background: #e3f1ee; }
 .current-probability span { position: relative; color: #397d79; }
@@ -77,7 +77,7 @@ th { font-weight: 500; }
 summary { font-size: 12px; color: #7c96a2; cursor: pointer; }
 .stage-picker { display: block; margin: 16px 0; }
 .table-scroll { overflow-x: auto; }
-.matrix-table { background: white; font-size: 12px; color: #78929e; text-align: right; }
+.matrix-table { background: white; font-size: 13px; color: #456672; text-align: right; }
 .matrix-table td, .matrix-table th { padding: 10px 14px; border-bottom: 1px solid #e1eaee; }
 .matrix-table td { font-family: Consolas, monospace; }
 .selected-matrix-row { background: #e9f4f1; }

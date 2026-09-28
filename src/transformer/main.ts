@@ -77,9 +77,9 @@ function architecture(run: TransformerRun) {
     <rect class="block-boundary" x="221" y="103" width="616" height="221" rx="10" />
     <text class="block-title" x="532" y="343" text-anchor="middle">一个 pre-LayerNorm decoder 块 · 单头注意力 + 逐位置 FFN</text>
     ${stages.map(([x, label]) => `<text class="stage-label" x="${x}" y="125" text-anchor="middle">${label}</text>`).join('')}
-    <path class="residual-path" d="M190,${selectedY} V64 H529 V${selectedY - 12}" marker-end="url(#flow-arrow)" />
+    <path class="residual-path" d="M190,${selectedY} V64 H550 V${selectedY} H542" marker-end="url(#flow-arrow)" />
     <text class="residual-label" x="358" y="54" text-anchor="middle">保留原向量，稍后相加</text>
-    <path class="residual-path" d="M548,${selectedY} V82 H802 V${selectedY - 12}" marker-end="url(#flow-arrow)" />
+    <path class="residual-path" d="M548,${selectedY} V82 H823 V${selectedY} H814" marker-end="url(#flow-arrow)" />
     <text class="residual-label" x="674" y="72" text-anchor="middle">保留注意力后的向量</text>
     ${run.tokens.map((token, row) => {
       const y = rowY(row);
