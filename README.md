@@ -192,10 +192,10 @@ pnpm dev
 
 “运行100次抽样”每次都从同一固定分布有放回抽取一个 token，不是生成连续100个 token。默认 T=1、top-p=0.8、种子2026；参数或种子变化后旧结果清空。32位线性同余伪随机算法只用于本页复现，同一种子不保证任何云端模型结果相同。人工概率不是任务正确率；这里没有训练、推理能力或真实 API 调用，也不需要密钥。
 
-本课起点 `vcm-02-06-start` 是上一课完成版；完成点 `vcm-02-06-end` 增加此页。按项目既有 Node.js/pnpm 版本启动独立分支：
+本课起点 `vcm-02-06-start` 是上一课完成版；完成点 `vcm-02-06-end-r2` 增加此页。按项目既有 Node.js/pnpm 版本启动独立分支：
 
 ```powershell
-git switch -c my-sampling-lab vcm-02-06-end
+git switch -c my-sampling-lab vcm-02-06-end-r2
 pnpm install --frozen-lockfile
 pnpm dev
 ```
@@ -205,7 +205,7 @@ pnpm dev
 ```powershell
 git add .
 git commit -m "保存我的采样实验"
-git switch -c my-sampling-lab-retry vcm-02-06-end
+git switch -c my-sampling-lab-retry vcm-02-06-end-r2
 pnpm install --frozen-lockfile
 pnpm dev
 ```
