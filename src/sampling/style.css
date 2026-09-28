@@ -37,7 +37,7 @@ h3 span { font: 13px 'Microsoft YaHei', sans-serif; color: #337b7b; }
 .scale { display: flex; justify-content: space-between; margin-top: 10px; color: #456672; font: 13px Consolas, 'Microsoft YaHei', monospace; }
 .table-scroll { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; color: #456672; font-size: 13px; }
-th, td { border-bottom: 1px solid #dce8eb; padding: 12px 10px; text-align: right; }
+th, td { border-bottom: 1px solid #dce8eb; padding: 12px 10px; text-align: right; white-space: nowrap; }
 th { font-weight: 500; }
 thead th { color: #456672; background: #eef4f6; white-space: nowrap; }
 th:first-child { text-align: left; }
